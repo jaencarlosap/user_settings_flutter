@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 
 import 'package:user_preferences/src/widgets/menu_widget.dart';
 
+import 'package:user_preferences/src/share_prefs/user_preferences.dart';
+
 class SettingsPage extends StatefulWidget {
   static final String routeName = 'settings';
 
@@ -10,17 +12,22 @@ class SettingsPage extends StatefulWidget {
 }
 
 class _SettingsPageState extends State<SettingsPage> {
-  bool _colorSecundario = false;
-  int _genero = 1;
-  String _nombre = 'Carlos';
+  bool _colorSecundario;
+  int _genero;
+  String _name;
 
-  TextEditingController _nombre_controller;
+  TextEditingController _nameController;
+
+  final prefs = new UserPreferences();
 
   @override
   void initState() {
     super.initState();
+    _genero = prefs.gender;
+    _colorSecundario = prefs.secondColor;
+    _name = prefs.name;
 
-    _nombre_controller = new TextEditingController(text: _nombre);
+    _nameController = new TextEditingController(text: _name);
   }
 
   @override
@@ -28,6 +35,7 @@ class _SettingsPageState extends State<SettingsPage> {
     return Scaffold(
       appBar: AppBar(
         title: Text('Ajustes de usuario'),
+        backgroundColor: (prefs.secondColor) ? Colors.teal : Colors.blue,
       ),
       drawer: MenuWidget(),
       body: ListView(
@@ -44,6 +52,7 @@ class _SettingsPageState extends State<SettingsPage> {
             title: Text('Color secundario'),
             onChanged: (value) {
               setState(() {
+                prefs.secondColor = value;
                 _colorSecundario = value;
               });
             },
@@ -52,34 +61,27 @@ class _SettingsPageState extends State<SettingsPage> {
             value: 1,
             groupValue: _genero,
             title: Text('Masculinos'),
-            onChanged: (value) {
-              setState(() {
-                _genero = value;
-              });
-            },
+            onChanged: _setSelectedGender,
           ),
           RadioListTile(
             value: 2,
             groupValue: _genero,
             title: Text('Femenino'),
-            onChanged: (value) {
-              setState(() {
-                _genero = value;
-              });
-            },
+            onChanged: _setSelectedGender,
           ),
           Divider(),
           Container(
             padding: EdgeInsets.symmetric(horizontal: 20.0),
             child: TextField(
-              controller: _nombre_controller,
+              controller: _nameController,
               decoration: InputDecoration(
                 labelText: 'Nombre',
                 helperText: 'Nombre de la persona',
               ),
               onChanged: (value) {
                 setState(() {
-                  _nombre = value;
+                  prefs.name = value;
+                  _name = value;
                 });
               },
             ),
@@ -87,5 +89,12 @@ class _SettingsPageState extends State<SettingsPage> {
         ],
       ),
     );
+  }
+
+  _setSelectedGender(int value) {
+    setState(() {
+      prefs.gender = value;
+      _genero = value;
+    });
   }
 }

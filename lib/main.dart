@@ -2,8 +2,16 @@ import 'package:flutter/material.dart';
 
 import 'package:user_preferences/src/pages/home_page.dart';
 import 'package:user_preferences/src/pages/settings_page.dart';
+import 'package:user_preferences/src/share_prefs/user_preferences.dart';
 
-void main() => runApp(MyApp());
+void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+
+  final prefs = new UserPreferences();
+  await prefs.initPrefs();
+
+  runApp(MyApp());
+}
 
 class MyApp extends StatelessWidget {
   @override
