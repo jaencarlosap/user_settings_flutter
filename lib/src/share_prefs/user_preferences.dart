@@ -37,4 +37,12 @@ class UserPreferences {
   get secondColor {
     return _prefs.getBool('secondColor') ?? false;
   }
+
+  set endPage(String value) {
+    _prefs.setString('endPage', value);
+  }
+
+  get endPage {
+    return _prefs.getString('endPage') ?? 'home';
+  }
 }

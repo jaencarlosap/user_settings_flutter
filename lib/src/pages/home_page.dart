@@ -10,6 +10,8 @@ class HomePage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    prefs.endPage = HomePage.routeName;
+
     return Scaffold(
       appBar: AppBar(
         title: Text('Preferencias de usuario'),
